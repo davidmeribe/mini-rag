@@ -42,6 +42,9 @@ try {
 	console.log('⚠️  No embeddings cache found, will use OpenAI API');
 }
 //=======================================================
+// To used an Embeddings cache so it doesn't go through 10k retrieving their embeddings one by one
+// Please you need to run the generateAndSaveEmbeddings().catch(console.error); at the end of this file comment out the 
+// demonstrate method.
 let embeddings_exercise: Record<string, number[]> = {};
 
 try {
@@ -55,6 +58,7 @@ try {
    console.log('⚠️  Error loading second embeddings cache:', err);
   console.log('⚠️  No embeddings cache found, will use OpenAI API');
 }
+  
 //==========================================================
 // get vocabulary for my exercise
 let vocabulary: string[] = [];
@@ -680,6 +684,7 @@ async function demonstrateWordArithmetic() {
      const assign2 = subtractVectors(addVectors(anaVec, troubVec), bugVec);
 
 	 const matches_ass2 =  await findClosestWord(assign2, ['resolve', 'solution', 'case', 'debug', 'find', 'business']);
+	 //const matches_ass2 =  await findClosestWord(assign2, vocabulary);
 	 //been getting duplicates have to remove
 	const matches_a2 = [...new Set(matches_ass2)];
 	 console.log('Top matches:');
