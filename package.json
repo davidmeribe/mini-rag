@@ -1,6 +1,6 @@
 {
-	"name": "mini_rag",
-	"version": "0.1.0",
+	"name": "y",
+	"version": "y",
 	"private": true,
 	"scripts": {
 		"dev": "next dev --turbopack",
@@ -39,7 +39,6 @@
 		"@types/cheerio": "1.0.0",
 		"@types/node-fetch": "3.0.2",
 		"ai": "^5.0.22",
-		"langsmith": "^0.5.14",
 		"axios": "^1.10.0",
 		"cheerio": "^1.1.0",
 		"csv-parser": "^3.2.0",
@@ -48,6 +47,7 @@
 		"fs": "0.0.1-security",
 		"husky": "^9.1.7",
 		"js-tiktoken": "^1.0.19",
+		"langsmith": "^0.5.14",
 		"lucide-react": "^0.514.0",
 		"next": "15.1.6",
 		"node-fetch": "^3.3.2",
@@ -80,5 +80,10 @@
 		"ts-node": "^10.9.2",
 		"typescript": "^5.8.3"
 	},
-	"packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+	"packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
+	"description": "student exercises",
+	"main": "index.js",
+	"repository": "https://github.com/projectshft/mini-rag.git",
+	"author": "n",
+	"license": "MIT"
 }
