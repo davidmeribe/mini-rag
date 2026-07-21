@@ -1,9 +1,24 @@
 import { searchDocuments } from '@/app/libs/pinecone';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+
+const querySchema = z.object({
+  query: z.string().min(1),
+  topK: z.number().optional().default(5),
+});
 
 export async function POST(request: NextRequest) {
+ try{	
 	const body = await request.json();
-	const { query, topK } = body;
+	const result = querySchema.safeParse(body);
+     if (!result.success) {
+           // return 400 error
+		   return NextResponse.json(
+			{ error: 'Query Validation Error' },
+			{ status: 400 }
+		);
+     }
+    const { query, topK } = result.data;
 
 	const results = await searchDocuments(query, topK);
 
@@ -21,5 +36,13 @@ export async function POST(request: NextRequest) {
 		query,
 		resultsCount: formattedResults.length,
 		results: formattedResults,
+		status: 200
 	});
+  }catch(error){
+        console.error('Error searching documents:', error);
+		return NextResponse.json(
+			{ error: 'Failed to Search Pinecone documents' },
+			{ status: 500 }
+		);
+  }
 }

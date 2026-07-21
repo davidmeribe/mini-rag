@@ -15,9 +15,9 @@
  * - Schedule with cron for automatic updates
  */
 
-import * as path from 'path';
-import * as fs from 'fs';
-import dotenv from 'dotenv';
+const path = require('path');
+const fs = require('fs');
+const dotenv = require('dotenv');
 
 // Load environment variables from the project root FIRST
 const rootDir = path.resolve(__dirname, '../..');
@@ -45,9 +45,9 @@ if (missingVars.length > 0) {
 	process.exit(1);
 }
 
-import { DataProcessor } from '../libs/dataProcessor';
-import { openaiClient } from '../libs/openai/openai';
-import { pineconeClient } from '../libs/pinecone';
+const { DataProcessor } = require('../libs/dataProcessor');
+const { openaiClient } = require('../libs/openai/openai');
+const { pineconeClient } = require('../libs/pinecone');
 
 /**
  * Simple function to scrape URLs and vectorize content to Pinecone
@@ -156,8 +156,10 @@ async function main() {
 		// Pinecone (GitHub README - works great!)
 		'https://github.com/pinecone-io/pinecone-ts-client',
 	];
+     
 
 	await scrapeAndVectorize(urls);
+	
 }
 
 // Execute main function with error handling

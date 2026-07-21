@@ -12,6 +12,58 @@ export type Chunk = {
 };
 
 /**
+ * Sanitizes raw scraped web content before chunking.
+ * Strips HTML, normalizes whitespace, handles special characters,
+ * and removes common boilerplate patterns.
+ */
+export function sanitizeText(text: string): string {
+	let sanitized = text;
+ 
+	// 1. Strip HTML tags
+	sanitized = sanitized.replace(/<[^>]*>/g, ' ');
+ 
+	// 2. Decode common HTML entities
+	sanitized = sanitized
+		.replace(/&amp;/g, '&')
+		.replace(/&lt;/g, '<')
+		.replace(/&gt;/g, '>')
+		.replace(/&quot;/g, '"')
+		.replace(/&#39;/g, "'")
+		.replace(/&nbsp;/g, ' ');
+ 
+	// 3. Normalize smart quotes and special punctuation
+	sanitized = sanitized
+		.replace(/[\u2018\u2019]/g, "'")   // smart single quotes
+		.replace(/[\u201C\u201D]/g, '"')   // smart double quotes
+		.replace(/\u2014/g, ' - ')          // em dash
+		.replace(/\u2013/g, ' - ')          // en dash
+		.replace(/\u2026/g, '...')          // ellipsis
+		.replace(/\u00A0/g, ' ');           // non-breaking space
+ 
+	// 4. Remove boilerplate patterns
+	sanitized = sanitized
+		.replace(/click here( to [^\n.]+)?/gi, '')
+		.replace(/skip to (main )?content/gi, '')
+		.replace(/cookie policy/gi, '')
+		.replace(/privacy policy/gi, '')
+		.replace(/terms (of (use|service))?/gi, '')
+		.replace(/all rights reserved/gi, '')
+		.replace(/copyright ©?[\d\s]*/gi, '')
+		.replace(/subscribe to (our )?(newsletter|updates)/gi, '')
+		.replace(/follow us on [^\n.]*/gi, '');
+ 
+	// 5. Normalize whitespace — collapse multiple spaces/tabs/newlines
+	sanitized = sanitized
+		.replace(/\t/g, ' ')
+		.replace(/[ ]{2,}/g, ' ')
+		.replace(/\n{3,}/g, '\n\n')
+		.trim();
+ 
+	return sanitized;
+}
+
+
+/**
  * Splits text into smaller chunks for processing
  * @param text The text to chunk
  * @param chunkSize Maximum size of each chunk
@@ -25,8 +77,11 @@ export function chunkText(
 	overlap: number = 50,
 	source: string = 'unknown'
 ): Chunk[] {
+
+	// Sanitize before chunking
+	const cleanText = sanitizeText(text);
 	const chunks: Chunk[] = [];
-	const sentences = text.split(/[.!?]+/).filter((s) => s.trim().length > 0);
+	const sentences = cleanText.split(/[.!?]+/).filter((s) => s.trim().length > 0);
 
 	let currentChunk = '';
 	let chunkStart = 0;
@@ -122,4 +177,21 @@ export function chunkText(
 function getLastWords(text: string, maxLength: number): string {
 	// TODO: Implement this function!
 	// YOUR CODE HERE
+	let result = '';
+	if (text.length <= maxLength) {
+		return text;
+	}
+    
+	const words = text.split(' ');
+
+	for (let i =(words.length -1); i >=0 ; i--){
+         if (result.length + words[i].length +1 > maxLength){
+			break;
+		 }
+		 else{
+			result = words[i] + ' ' + result;
+		 }
+	}
+
+	return result;
 }
